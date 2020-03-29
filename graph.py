@@ -45,28 +45,25 @@ def cost(arr, dist): #Cost of the current tour value give the travel array and t
     return sum([dist[i,j] for i,j in 
                 zip(arr, arr[1:]+arr[0:1])]) #Sum all costs from 0 - n+1 (where n+1 = 0)
 
-def minimum_spanning_tree(graph, n,start):      # A function to create a minimum spanning tree from a graph.
-    reached     = set([start])                  # Set of nodes already used.
+def minimum_spanning_tree(graph, n):      # A function to create a minimum spanning tree from a graph.
+    reached     = set([0])                  # Set of nodes already used.
     all_nodes   = set(range(n))                 # All nodes.
     mst         = {}                            # Minimum Spanning tree initialized.
-    minimum     = list(zip([np.inf]*n,[0]*n))   # Minimum values in the row.
-    minimum[0]  = (np.min(graph[0]),np.argmin(graph[0]))
-    print(minimum)
+    graph[:,0] = np.inf
     b = 0
     for i in range(n-1): # Loops until all the nodes are added. (time looped = V) 
         toUse, toReach = 0,0 # Node used in order to reach node.
         mini = math.inf
         for row in reached:
-            for col in (cols-reached): # time looped = Rows*Cols 
-                b+=1
-                if(graph[row][col]<mini):
-                    mini = graph[row][col]
-                    toUse = row
-                    toReach = col
+            cm = np.min(graph[row])
+            if(cm<mini):
+                mini    = cm
+                toUse   = row
+                toReach = np.argmin(graph[row])
                     
         mst[toUse] = mst[toUse]+[toReach] if toUse in mst else [toReach]
         reached.add(toReach)
-    print("b:",b,"n:",n)
+        graph[:,toReach] = np.inf
     return(mst)
 
 class Graph:
@@ -138,7 +135,6 @@ class Graph:
     def Custom(self):
         end = []
         def l_(d, k):
-            #print(end)
             end.append(k)
             d[k].sort()
             for i in d[k]:
@@ -147,18 +143,22 @@ class Graph:
                 else:
                     end.append(i)
             return end
-        mini = math.inf
-        for i in range(1):#self.n):
-            temp = []
-            try:
-                end = []
-                mst = minimum_spanning_tree(self.dist,self.n,i)
-                temp = l_(mst,i)
-            except:
-                continue
-            c = cost(temp,self.dist)
-            if(c<mini):
-                self.perm = temp 
-                mini = cost(temp,self.dist)
-                print(i)
+        
+        used_nodes = []
+        def l(d, k):
+            used_nodes.append(k) 
+            d[k].sort()
+            for i in d[k]:
+                if(i in d and not i in used_nodes):
+                    l(d, i)
+                else:
+                    used_nodes.append(i)
+            return used_nodes
 
+        mst = minimum_spanning_tree(self.dist.copy(),self.n)
+        
+
+        print(mst)
+        self.perm = l(mst,0)
+        self.perm = res = [i for n, i in enumerate(self.perm) if i not in self.perm[:n]]
+        print("perm",self.perm)
