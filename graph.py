@@ -134,30 +134,17 @@ class Graph:
 
     def Custom(self):
         end = []
-        def l_(d, k):
+        def l(d, k):
             end.append(k)
             d[k].sort()
             for i in d[k]:
                 if(i in d):
-                    l_(d, i)
+                    l(d, i)
                 else:
                     end.append(i)
             return end
         
-        used_nodes = []
-        def l(d, k):
-            used_nodes.append(k) 
-            d[k].sort()
-            for i in d[k]:
-                if(i in d and not i in used_nodes):
-                    l(d, i)
-                else:
-                    used_nodes.append(i)
-            return used_nodes
-
         mst = minimum_spanning_tree(self.dist.copy(),self.n)
-        
-
         print(mst)
         self.perm = l(mst,0)
         self.perm = res = [i for n, i in enumerate(self.perm) if i not in self.perm[:n]]
