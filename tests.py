@@ -3,6 +3,8 @@ import graph
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import glob
+import os
 
 class visualization:
     def __init__(self, filename):
@@ -48,24 +50,66 @@ class visualization:
                     arrowprops=dict(arrowstyle="-|>",shrinkA=10,shrinkB=10,
                                     connectionstyle="arc3,rad=0."))
 
+class Generating_Euclidean_graphs():
+    def __init__(self):
+        self.sizeN = [10,25,50,75,100]
+        self.create()
+    def random_graphs(self, n, mi, ma, name):
+        points = np.random.randint(mi,ma,size=(n,2))
+        #print(points)
+        np.savetxt(name+".txt", points, fmt="%d")
+        print(name)
 
+    
+    def create(self):
+        for i in self.sizeN:
+            for j in range(1,6):
+                self.random_graphs(i, 0, (10*j)**2,("Graphs\\"+"random_n_"+str(i)+"_r"+str((10*j)**2)))
+
+def RandomSolver():
+    # os.walk("Graph//")
+    mylist = [f for f in glob.glob("Graphs\\*")]
+
+    for filename in mylist:
+        g = graph.Graph(-1, filename)
+        # v = visualization(filename)
+        # plt.show()
+        methods =  [(g.swapHeuristic,"Swap Heuristic"),
+                    (g.TwoOptHeuristic,"TwoOptHueristic"),
+                    (g.Greedy,"Greedy"),
+                    (g.twoApproximation,"Minimum Spanning Tree")]
+
+        for method, name in methods:
+            #v = visualization(filename)
+            method()
+            #v.plot_solution(g.perm, g.n)
+            #v.ax.set_title(name)
+            print(name,g.tourValue())
+            # plt.show()
+        print("--"*50)
 if __name__ == '__main__':
     # Variables to set.
-    filename   = "cities25"
-    n           = -1
-    #Processing.
-    g = graph.Graph(n, filename)
-    v = visualization(filename)
-    plt.show()
-    methods =  [(g.swapHeuristic,"Swap Heuristic"),
-                (g.TwoOptHeuristic,"TwoOptHueristic"),
-                (g.Greedy,"Greedy"),
-                (g.Custom,"Minimum Spanning Tree")]
+    filename   = "cities50"
+    n          = -1
 
-    for method, name in methods:
-        v = visualization(filename)
-        method()
-        v.plot_solution(g.perm, g.n)
-        v.ax.set_title(name)
-        print(g.tourValue())
-        plt.show()
+    RandomSolver()
+    #Processing.
+    #Generating_Euclidean_graphs()
+    # for i in range():
+    #     g = graph.Graph(n, filename)
+    #     v = visualization(filename)
+    #     # plt.show()
+    #     methods =  [(g.swapHeuristic,"Swap Heuristic"),
+    #                 (g.TwoOptHeuristic,"TwoOptHueristic"),
+    #                 (g.Greedy,"Greedy"),
+    #                 (g.Custom,"Minimum Spanning Tree")]
+
+    #     for method, name in methods:
+    #         #v = visualization(filename)
+    #         method()
+    #         #v.plot_solution(g.perm, g.n)
+    #         #v.ax.set_title(name)
+    #         print(name,g.tourValue())
+    #         # plt.show()
+
+    

@@ -132,7 +132,7 @@ class Graph:
             self.perm[i+1] = next_node
             unused.remove(next_node)
 
-    def Custom(self):
+    def twoApproximation(self):
         end = []
         def l(d, k):
             end.append(k)
@@ -143,9 +143,8 @@ class Graph:
                 else:
                     end.append(i)
             return end
-        
         mst = minimum_spanning_tree(self.dist.copy(),self.n)
-        print(mst)
+        #print(mst)
         self.perm = l(mst,0)
         self.perm = res = [i for n, i in enumerate(self.perm) if i not in self.perm[:n]]
-        print("perm",self.perm)
+        #print("perm",self.perm)
