@@ -99,7 +99,7 @@ def find_odd_vertexes(mst):
         #Adds the count of edge going or out to the respective city.
         graph[edge[0]] += 1
         graph[edge[1]] += 1
-    Odd vertexes.
+    #Odd vertexes.
     v = []
     for i in graph:
         if graph[i] % 2 == 1: #If odd then save it.
@@ -242,6 +242,7 @@ class Graph:
         mst_cost = 0
         for i in mst:
             mst_cost+=i[2]
+        print("Optimal",mst_cost)
         #print(mst)
         odd_vertex = find_odd_vertexes(mst)                     # Find the odd vertices.
         #print(odd_vertex)
@@ -256,9 +257,10 @@ class Graph:
             if(not i in visited):
                 visited.add(i)
                 self.perm.append(i)
+        return(mst_cost)
 
 if __name__ == '__main__':
-    g = Graph(-1, "cities25")
+    g = Graph(-1, "cities75")
     methods =  [(g.swapHeuristic,"Swap Heuristic"),
                 (g.TwoOptHeuristic,"TwoOptHueristic"),
                 (g.Greedy,"Greedy"),

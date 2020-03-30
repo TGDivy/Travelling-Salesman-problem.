@@ -66,48 +66,48 @@ class Generating_Euclidean_graphs():
 def RandomSolver():
     # os.walk("Graph//")
     mylist = [f for f in glob.glob("Graphs\\*")]
-
+    total = [[]]*5
+    print(total)
     for filename in mylist:
         g = graph.Graph(-1, filename)
-        # v = visualization(filename)
-        # plt.show()
         methods =  [(g.swapHeuristic,"Swap Heuristic"),
                     (g.TwoOptHeuristic,"TwoOptHueristic"),
                     (g.Greedy,"Greedy"),
                     (g.twoApproximation,"Minimum Spanning Tree"),
                     (g.christofide,"Christofide")]
 
-        for method, name in methods:
-            #v = visualization(filename)
+        for i, (method, name) in enumerate(methods):
             method()
-            #v.plot_solution(g.perm, g.n)
-            #v.ax.set_title(name)
-            print(name,g.tourValue())
-            # plt.show()
+            # print(name,g.tourValue())
+            total[i].append(g.tourValue())
+        
         print("--"*50)
+    np.savetxt("answers.csv",np.array(total).T,fmt="%d",delimiter =",")
+
 if __name__ == '__main__':
     # Variables to set.
     filename   = "cities50"
     n          = -1
-    #RandomSolver()
+    RandomSolver()
     #Processing.
     #Generating_Euclidean_graphs()
     
-    g = graph.Graph(n, filename)
-    v = visualization(filename)
-    plt.show()
-    methods =  [(g.swapHeuristic,"Swap Heuristic"),
-                (g.TwoOptHeuristic,"TwoOptHueristic"),
-                (g.Greedy,"Greedy"),
-                (g.twoApproximation,"Minimum Spanning Tree"),
-                (g.christofide,"Christofide")]
+    # g = graph.Graph(n, filename)
+    # v = visualization(filename)
+    # plt.title("Cities 50")
+    # plt.show()
+    # methods =  [(g.swapHeuristic,"Swap Heuristic"),
+    #             (g.TwoOptHeuristic,"TwoOptHueristic"),
+    #             (g.Greedy,"Greedy"),
+    #             (g.twoApproximation,"Minimum Spanning Tree"),
+    #             (g.christofide,"Christofide")]
 
-    for method, name in methods:
-        v = visualization(filename)
-        method()
-        v.plot_solution(g.perm, g.n)
-        v.ax.set_title(name)
-        print(name,g.tourValue())
-        plt.show()
+    # for method, name in methods:
+    #     v = visualization(filename)
+    #     method()
+    #     v.plot_solution(g.perm, g.n)
+    #     v.ax.set_title(name)
+    #     print(name,g.tourValue())
+    #     plt.savefig(name+".png")
 
     
