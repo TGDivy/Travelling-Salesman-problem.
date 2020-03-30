@@ -38,16 +38,13 @@ class visualization:
         
         sol = [self.cities[i] for i in solution]
         for i in range(n-1):
-
             # adding a bit of shift to start and end positions            
             start_pos = self.offset_points(sol[i],sol[i+1], 6) 
             end_pos   = self.offset_points(sol[i+1],sol[i], 6)
-            
-
             self.ax.annotate("",
                     xy=start_pos, 
                     xytext=end_pos, 
-                    arrowprops=dict(arrowstyle="-|>",shrinkA=10,shrinkB=10,
+                    arrowprops=dict(arrowstyle="<|-",shrinkA=10,shrinkB=10,
                                     connectionstyle="arc3,rad=0."))
 
 class Generating_Euclidean_graphs():
@@ -77,7 +74,8 @@ def RandomSolver():
         methods =  [(g.swapHeuristic,"Swap Heuristic"),
                     (g.TwoOptHeuristic,"TwoOptHueristic"),
                     (g.Greedy,"Greedy"),
-                    (g.twoApproximation,"Minimum Spanning Tree")]
+                    (g.twoApproximation,"Minimum Spanning Tree"),
+                    (g.christofide,"Christofide")]
 
         for method, name in methods:
             #v = visualization(filename)
@@ -91,25 +89,25 @@ if __name__ == '__main__':
     # Variables to set.
     filename   = "cities50"
     n          = -1
-
-    RandomSolver()
+    #RandomSolver()
     #Processing.
     #Generating_Euclidean_graphs()
-    # for i in range():
-    #     g = graph.Graph(n, filename)
-    #     v = visualization(filename)
-    #     # plt.show()
-    #     methods =  [(g.swapHeuristic,"Swap Heuristic"),
-    #                 (g.TwoOptHeuristic,"TwoOptHueristic"),
-    #                 (g.Greedy,"Greedy"),
-    #                 (g.Custom,"Minimum Spanning Tree")]
+    
+    g = graph.Graph(n, filename)
+    v = visualization(filename)
+    plt.show()
+    methods =  [(g.swapHeuristic,"Swap Heuristic"),
+                (g.TwoOptHeuristic,"TwoOptHueristic"),
+                (g.Greedy,"Greedy"),
+                (g.twoApproximation,"Minimum Spanning Tree"),
+                (g.christofide,"Christofide")]
 
-    #     for method, name in methods:
-    #         #v = visualization(filename)
-    #         method()
-    #         #v.plot_solution(g.perm, g.n)
-    #         #v.ax.set_title(name)
-    #         print(name,g.tourValue())
-    #         # plt.show()
+    for method, name in methods:
+        v = visualization(filename)
+        method()
+        v.plot_solution(g.perm, g.n)
+        v.ax.set_title(name)
+        print(name,g.tourValue())
+        plt.show()
 
     
