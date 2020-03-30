@@ -45,70 +45,62 @@ def cost(arr, dist): #Cost of the current tour value give the travel array and t
     return sum([dist[i,j] for i,j in 
                 zip(arr, arr[1:]+arr[0:1])]) #Sum all costs from 0 - n+1 (where n+1 = 0)
 
-def minimum_spanning_tree2(graph, n,start): # A function to create a minimum spanning tree from a graph.
-    reached = set([start]) # Set of nodes already used.
-    rows, cols = set(range(n)), set(range(n)) # Number of rows or columns in a graph.
-    mst = {} # Minimum Spanning tree initialized.
+def minimum_spanning_tree(graph, n):      # A function to create a minimum spanning tree from a graph.
+    reached     = set([0])                  # Set of nodes already used.
+    all_nodes   = set(range(n))                 # All nodes.
+    mst         = {}                            # Minimum Spanning tree initialized.
+    graph[:,0] = np.inf
     b = 0
-    for i in range(n-1): # Loops until all the noes are added. (time looped = V) 
+    for i in range(n-1): # Loops until all the nodes are added. (time looped = V) 
         toUse, toReach = 0,0 # Node used in order to reach node.
         mini = math.inf
         for row in reached:
-            for col in (cols-reached): # time looped = Rows*Cols 
-                b+=1
-                if(graph[row][col]<mini):
-                    mini = graph[row][col]
-                    toUse = row
-                    toReach = col
+            cm = np.min(graph[row])
+            if(cm<mini):
+                mini    = cm
+                toUse   = row
+                toReach = np.argmin(graph[row])
                     
         mst[toUse] = mst[toUse]+[toReach] if toUse in mst else [toReach]
         reached.add(toReach)
-    print("b:",b,"n:",n)
+        graph[:,toReach] = np.inf
     return(mst)
 
 class Graph:
-    # Complete as described in the specification, taking care of two cases:
-    # the -1 case, where we read points in the Euclidean plane, and
-    # the n>0 case, where we read a general graph in a different format.
-    # self.perm, self.dists, self.n are the key variables to be set up.
     def __init__(self,n,filename):
         (self.dist, 
         self.perm, 
-        self.n) = Euclidean(filename) if n==-1 else General(n, filename)
-    # Complete as described in the spec, to calculate the cost of the
-    # current tour (as represented by self.perm).
-    def tourValue(self):
+        self.n) = Euclidean(filename) if n==-1 else General(n, filename) #Euclidean format n==-1 otherwise general.
+
+    def tourValue(self): #Cost of the tourvalue as described by specifications.
         return sum([self.dist[i,j] for i,j in 
                     zip(self.perm, self.perm[1:]+self.perm[0:1])])
-    # Attempt the swap of cities i and i+1 in self.perm and commit
-    # commit to the swap if it improves the cost of the tour.
-    # Return True/False depending on success.
+    
     def trySwap(self,i):
-        new_perm = self.perm.copy()
-        i_1 = 0 if (i+1)>= self.n else i+1
+        new_perm = self.perm.copy() # making a copy of the current best tour.
+        i_1 = 0 if (i+1)>= self.n else i+1 # In order to loop around the list. index value.
         
+        #Swapping values 
         new_perm[i_1] = self.perm[i]
         new_perm[i]   = self.perm[i_1]
-
+        #Comparing the two tour's costs
         initial_cost= cost(self.perm,self.dist)
         new_cost    = cost(new_perm,self.dist)
         flag = new_cost < initial_cost
-
+        #Making the decsion to select the tour.
         self.perm = new_perm if flag else self.perm
         return flag
-    # Consider the effect of reversiing the segment between
-    # self.perm[i] and self.perm[j], and commit to the reversal
-    # if it improves the tour value.
-    # Return True/False depending on success.              
+
     def tryReverse(self,i,j):
-        new_perm = self.perm.copy()        
-        new_perm[i:j+1] = new_perm[i:j+1][::-1]
-
+        new_perm = self.perm.copy() #making a copy of the current best tour.
+        new_perm[i:j+1] = new_perm[i:j+1][::-1] #reversing a part of the tour.
+        #Calculating the costs of the tours.
         initial_cost, new_cost = cost(self.perm,self.dist), cost(new_perm,self.dist)
-        flag = new_cost < initial_cost- 0.0000000001
-
+        flag = new_cost < initial_cost- 0.0000000001 # neccessary due to the python rounding issues.
+        #Making decision to select the better tour.
         self.perm = new_perm if flag else self.perm
         return flag
+    
     def swapHeuristic(self):
         better = True
         while better:
@@ -116,6 +108,7 @@ class Graph:
             for i in range(self.n):
                 if self.trySwap(i):
                     better = True
+    
     def TwoOptHeuristic(self):
         better = True
         while better:
@@ -124,12 +117,10 @@ class Graph:
                 for i in range(j):
                     if self.tryReverse(i,j):
                         better = True                
-    # Implement the Greedy heuristic which builds a tour starting
-    # from node 0, taking the closest (unused) node as 'next'
-    # each time.
+    
     def Greedy(self):
-        self.perm[0] = 0
-        unused = set(range(1,self.n))
+        self.perm[0] = 0 # intializing the tour at 0, (can select anything.)
+        unused = set(range(1,self.n)) # Set of nodes current unused.
         for i in range(0, self.n-1):
             mini = math.inf
             next_node = 0
@@ -141,44 +132,19 @@ class Graph:
             self.perm[i+1] = next_node
             unused.remove(next_node)
 
-    def Custom(self):
+    def twoApproximation(self):
         end = []
-        def l_(d, k):
-            #print(end)
+        def l(d, k):
             end.append(k)
             d[k].sort()
             for i in d[k]:
                 if(i in d):
-                    l_(d, i)
+                    l(d, i)
                 else:
                     end.append(i)
             return end
-        mini = math.inf
-        for i in range(1):#self.n):
-            temp = []
-            try:
-                end = []
-                mst = minimum_spanning_tree2(self.dist,self.n,i)
-                temp = l_(mst,i)
-            except:
-                continue
-            c = cost(temp,self.dist)
-            if(c<mini):
-                self.perm = temp 
-                mini = cost(temp,self.dist)
-                print(i)
-
-if __name__ == '__main__':
-    graph = Graph(6,"sixnodes")
-    #graph = Graph(-1,"cities50")
-
-    print("Raw:",graph.tourValue())
-    graph.swapHeuristic()
-    print("Swapped:",graph.tourValue())
-    graph.TwoOptHeuristic()
-    print("TwoOpt",graph.tourValue())
-    #graph = Graph(6,"sixnodes")
-    graph.Greedy()
-    print("Greedy,",graph.tourValue())
-    graph.Custom()
-    print("Custom",graph.tourValue())
+        mst = minimum_spanning_tree(self.dist.copy(),self.n)
+        #print(mst)
+        self.perm = l(mst,0)
+        self.perm = res = [i for n, i in enumerate(self.perm) if i not in self.perm[:n]]
+        #print("perm",self.perm)
