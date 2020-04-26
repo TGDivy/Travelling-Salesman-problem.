@@ -15,12 +15,14 @@ However, there are many versions of the problem, on which specifically we can de
 #### Swap Heuristic
 
 Here, I explore the effect of repeatedly swapping the order in which a pair of adjacent cities are visited, as long as this swap improves (reduces) the cost of the overall tour.
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Swap%20Heuristic.png)
 
 #### 2-Opt Heuristic
 
 The 2-Opt Heuristic is another heuristic which repeatedly makes *local adjustments* until there is no improvement from doing these. In this case the alterations are more significant than the swaps. 
 
 This method repeatedly nominates a contiguous sequence of cities on the current tour, and proposes that these be visited in the reverse order, if that would reduce the overall cost of the tour.
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/TwoOptHueristic.png)
 
 #### Greedy
 
@@ -28,6 +30,7 @@ A commonly used approach to optimization problems is the greedy approach, where 
 
 For the TSP problem, this approach involves taking some initial city/node (for us, we will take the one indexed 0) and building a tour out from that starting point. At the i-th step (for i= 0,...), we consider the recently-assigned endpoint in path against all previously unused nodes, and then we take our next node to be the one closest in distance to node at i. This will eventually create
 a permutation within the solution.
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Greedy.png)
 
 #### 2-Approximation Algorithm (Polynomial Time)
 
@@ -36,10 +39,11 @@ This is a bit sophisticated method, but requires the **graph to follow the trian
 We start by computing a MST (minimum spanning tree) whose weight is a lower bound on the length of an optimal TSP tour. Then, using this MST to build a tour whose cost is no more than twice that of MST's weight as long as the cost function satisfies triangle inequality.
 
 This website  provides a better explanation and mathematics proof for more details http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/AproxAlgor/TSP/tsp.htm
-
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Minimum%20Spanning%20Tree.png)
 ### Christofide's Algorithm (Polynomial time)
 
 To tackle this, I did some research and found Christofide’s algorithm to be quite interesting which matched the above requirements. It claims to guarantee solution within 1.5 error.
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Christofide.png)
 
 #### Algorithm
 
@@ -105,4 +109,4 @@ I have written the details for testing, in the test.py file followed by the high
 
 Here is the overview:
 
-![image-20200426192631311](G:\Coursework\Algorithms and Data Structures\ass\Images\image-20200426192631311.png)
+![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/image-20200426192631311.png)
