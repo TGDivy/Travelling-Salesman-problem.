@@ -1,5 +1,17 @@
 # Heuristics for the Travelling Salesman Problem
 
+- [Heuristics for the Travelling Salesman Problem](#heuristics-for-the-travelling-salesman-problem)
+    + [Introduction](#introduction)
+    + [Solutions](#solutions)
+      - [Swap Heuristic](#swap-heuristic)
+      - [2-Opt Heuristic](#2-opt-heuristic)
+      - [Greedy](#greedy)
+      - [2-Approximation Algorithm (Polynomial Time)](#2-approximation-algorithm)
+    + [Christofides Algorithm (Polynomial Time)](#christofides-algorithm)
+      - [Algorithm](#algorithm)
+      - [Proof for polynomial time.](#proof-for-polynomial-time)
+      - [Proof for 1.5 error approximation](#proof-for-15-error-approximation)
+  * [Testing](#testing)
 
 
 ### Introduction
@@ -32,7 +44,7 @@ For the TSP problem, this approach involves taking some initial city/node (for u
 a permutation within the solution.
 ![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Greedy.png)
 
-#### 2-Approximation Algorithm (Polynomial Time)
+#### 2-Approximation Algorithm
 
 This is a bit sophisticated method, but requires the **graph to follow the triangle inequality**.
 
@@ -40,7 +52,7 @@ We start by computing a MST (minimum spanning tree) whose weight is a lower boun
 
 This website  provides a better explanation and mathematics proof for more details http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/AproxAlgor/TSP/tsp.htm
 ![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Minimum%20Spanning%20Tree.png)
-### Christofide's Algorithm (Polynomial time)
+### Christofides Algorithm
 
 To tackle this, I did some research and found Christofide’s algorithm to be quite interesting which matched the above requirements. It claims to guarantee solution within 1.5 error.
 ![image-20200426192631311](https://github.com/TGDivy/Travelling-Salesman-problem./blob/master/Images/Christofide.png)
